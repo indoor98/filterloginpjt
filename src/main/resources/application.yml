@@ -15,4 +15,8 @@ spring:
       generate-ddl: true
       dialect: org.hibernate.dialect.MariaDBDialect
 
-
+  jwt:
+    secret-key: asdasdwd@asd@DasdDADWsdadsd@wg@dhjgadhasgdd@wgSDAwSadsbdjhA@SDwdSADSAWwdwasDWDASdwdaSDWdasdwdas@DNwdASNdAdawdjkahsdjkhwuadhwkdh2djkhda
+    life:
+      atk: 300000
+      rtk: 3000000
