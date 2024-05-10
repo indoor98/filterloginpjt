@@ -20,3 +20,10 @@ spring:
     life:
       atk: 300000
       rtk: 3000000
+
+
+logging:
+  level:
+    org:
+      springframework:
+        security=DEBUG:
