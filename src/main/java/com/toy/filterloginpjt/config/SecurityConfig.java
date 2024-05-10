@@ -23,10 +23,6 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ObjectMapper objectMapper;
-    private final CustomUsernamePasswordAuthenticationProvider customUsernamePasswordAuthenticationProvider;
-    private final CustomSuccessHandler customSuccessHandler;
-    private final CustomFailHandler customFailHandler;
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -44,7 +40,6 @@ public class SecurityConfig {
                         return config;
                     }
                 }))
-                .addFilterAfter(customUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
                 .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers(
                             "/api/v1/auth/signup",
@@ -56,20 +51,7 @@ public class SecurityConfig {
         http.headers(options -> options.frameOptions(frame -> frame.disable()));
 
         http.formLogin(formLogin -> formLogin.disable());
-
         http.httpBasic(Customizer.withDefaults());
         return (SecurityFilterChain)http.build();
     }
-
-    @Bean
-    public AuthenticationManager authenticationManager() throws Exception {//AuthenticationManager 등록
-        //DaoAuthenticationProvider 사용
-        return new ProviderManager(customUsernamePasswordAuthenticationProvider);
-    }
-
-    @Bean
-    public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
-        return new CustomUsernamePasswordAuthenticationFilter(objectMapper, authenticationManager());
-    }
-
 }
