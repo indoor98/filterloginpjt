@@ -21,6 +21,11 @@ spring:
       atk: 300000
       rtk: 3000000
 
+  data:
+    redis:
+      host: redis
+      port: 6379
+
 
 logging:
   level:
