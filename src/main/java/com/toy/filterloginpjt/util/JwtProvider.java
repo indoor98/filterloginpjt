@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.filterloginpjt.dto.SignInRequestDTO;
 import com.toy.filterloginpjt.redis.RedisDao;
 import com.toy.filterloginpjt.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.Data;
@@ -46,7 +47,7 @@ public class JwtProvider {
         String jwt = Jwts.builder()
                 .setIssuer("JwtProject")
                 .setSubject("JWT Token")
-                .claim("user_id", payLoad.getId())
+                .claim("id", payLoad.getId()) // 클레임과 PayLoad 멤버변수 명이 같아야합니다.
                 .claim("email", payLoad.getEmail())
                 .claim("type", payLoad.getType())
                 .claim("authority", payLoad.getAuthority())
@@ -69,7 +70,10 @@ public class JwtProvider {
                 .parseClaimsJws(jwt)
                 .getBody()
                 .getSubject();
-        return objectMapper.readValue(PayLoadStr, PayLoad.class);
+
+        System.out.println(PayLoadStr);
+
+        return null;
     }
 
 }

@@ -2,6 +2,8 @@ package com.toy.filterloginpjt.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toy.filterloginpjt.config.filter.CustomUsernamePasswordAuthenticationFilter;
+import com.toy.filterloginpjt.config.filter.JwtAuthenticationFilter;
+import com.toy.filterloginpjt.util.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -22,6 +26,8 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtProvider jwtProvider;
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -40,6 +46,7 @@ public class SecurityConfig {
                         return config;
                     }
                 }))
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> {
                     requests.requestMatchers(
                             "/api/v1/auth/signup",
@@ -50,7 +57,7 @@ public class SecurityConfig {
 
         http.headers(options -> options.frameOptions(frame -> frame.disable()));
 
-        http.formLogin(formLogin -> formLogin.disable());
+        http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
         return (SecurityFilterChain)http.build();
     }

@@ -10,10 +10,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,13 +31,8 @@ public class UserController {
         return new ResponseEntity<SignInResponseDTO>(responseDTO, HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/")
-    public String home() {
-        return "hello";
-    }
-
-    @RequestMapping("/success")
-    public String success() {
-        return "success";
+    @GetMapping("/api/v1/auth/test")
+    public ResponseEntity<String> test() {
+        return new ResponseEntity<String>("성공!!", HttpStatus.ACCEPTED);
     }
 }
