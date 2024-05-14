@@ -45,12 +45,15 @@ public class UserService {
 
     @Transactional
     public SignInResponseDTO signIn(SignInRequestDTO requestDTO) {
-
+        
+        // 유저 객체 불러오기 <= 토큰에 담기 위한 유저 정보를 얻기 위함
         User user = userRepository.findByEmail(requestDTO.getEmail());
 
-        if (!requestDTO.getPassword().equals(user.getPassword())) {
+        // 유효성 검사
+        if (!requestDTO.getPassword().equals(user.getPassword()) || user==null) {
             throw new BadCredentialsException("잘못된 이메일 또는 비밀번호입니다. 확인해주세요");
         }
+
 
         PayLoad AtkPayLoad = PayLoad.builder()
                             .id(user.getId())

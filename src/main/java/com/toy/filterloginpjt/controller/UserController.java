@@ -27,7 +27,6 @@ public class UserController {
     @PostMapping("/api/v1/auth/signin")
     public ResponseEntity<SignInResponseDTO> signIn(@RequestBody SignInRequestDTO requestDTO) {
         SignInResponseDTO responseDTO = userService.signIn(requestDTO);
-
         return new ResponseEntity<SignInResponseDTO>(responseDTO, HttpStatus.ACCEPTED);
     }
 

@@ -64,16 +64,22 @@ public class JwtProvider {
     // Jwt 유효성 검사를 위해 토큰에서 PayLoad 추출하기
     public PayLoad getPayLoad(String jwt) throws JsonProcessingException {
         SecretKey secretKey = Keys.hmacShaKeyFor(JWT_KEY.getBytes(StandardCharsets.UTF_8));
-        String PayLoadStr = Jwts.parserBuilder()
+
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(jwt)
-                .getBody()
-                .getSubject();
+                .getBody();
 
-        System.out.println(PayLoadStr);
+        System.out.println(claims);
 
-        return null;
+        PayLoad payLoad = PayLoad.builder()
+                .id(Long.valueOf((Integer) claims.get("id")))
+                .email((String) claims.get("email"))
+                .type((String) claims.get("type"))
+                .authority((String) claims.get("authority"))
+                .build();
+        return payLoad;
     }
 
 }
